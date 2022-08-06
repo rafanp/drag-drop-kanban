@@ -17,6 +17,7 @@ interface TaskProps {
   task: { id: string; content: string };
   index: number;
   onChangeColumn: any;
+  onDelete: any;
 }
 
 export const Task: React.FC<TaskProps> = (props) => {
@@ -34,7 +35,11 @@ export const Task: React.FC<TaskProps> = (props) => {
           isDragging={snapshot.isDragging}
           isDragDisabled={false}
         >
-          <BasicCard task={props.task} onChangeColumn={props.onChangeColumn} />
+          <BasicCard
+            task={props.task}
+            onChangeColumn={props.onChangeColumn}
+            onDelete={props.onDelete}
+          />
         </Container>
       )}
     </Draggable>

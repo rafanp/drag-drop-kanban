@@ -6,6 +6,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
+import PositionedPopper from '../UI/Popper/CreateNewTask';
 
 const Container = styled.div`
   margin: 8px;
@@ -45,10 +46,12 @@ interface ColumnProps {
   };
   tasks: { id: string; conteudo: string; titulo: string }[];
   onChange?: any;
+  onConfirm?: any;
+  onDelete?: any;
 }
 
 export const Column: React.FC<ColumnProps> = (props) => {
-  const { onChange, column } = props;
+  const { onChange, onDelete, column } = props;
 
   const onChangeColumn = (result: any) => {
     const { column, index, task, buttonClick } = result;
@@ -63,17 +66,20 @@ export const Column: React.FC<ColumnProps> = (props) => {
     onChange(query);
   };
 
+  const onDeleteTask = (result: any) => {
+    console.log('result :', result);
+    onDelete(result);
+  };
+
   return (
     <Container>
       <Stack direction="row" spacing={1} alignItems="center">
         <Title>{props.column.titulo}</Title>
         {column.cadAddNewTask && (
-          <IconButton
-            aria-label="right"
-            // onClick={() => props.onChangeColumn('next')}
-          >
-            <AddIcon />
-          </IconButton>
+          <PositionedPopper createNewTask={props.onConfirm} />
+          // <IconButton aria-label="right" onClick={() => props.addNewTask()}>
+          //   <AddIcon />
+          // </IconButton>
         )}
       </Stack>
 
@@ -91,6 +97,9 @@ export const Column: React.FC<ColumnProps> = (props) => {
                     key={task.id}
                     task={task}
                     index={index}
+                    onDelete={(taskId: string) =>
+                      onDeleteTask({ task, index, column: props.column })
+                    }
                     onChangeColumn={(actionType: string) =>
                       onChangeColumn({
                         task,
