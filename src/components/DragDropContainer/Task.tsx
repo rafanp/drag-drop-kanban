@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
+import BasicCard from '../UI/Card';
 
 interface ContainerProps {
   isDragDisabled: boolean;
@@ -9,22 +10,13 @@ interface ContainerProps {
 }
 
 const Container = styled.div<ContainerProps>`
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-  padding: 8px;
   margin-bottom: 8px;
-  transition: background-color 0.2s ease;
-  background-color: ${(props) =>
-    props.isDragDisabled
-      ? 'lightgrey'
-      : props.isDragging
-      ? 'lightgreen'
-      : 'white'};
 `;
 
 interface TaskProps {
   task: { id: string; content: string };
   index: number;
+  onChangeColumn: any;
 }
 
 export const Task: React.FC<TaskProps> = (props) => {
@@ -42,7 +34,7 @@ export const Task: React.FC<TaskProps> = (props) => {
           isDragging={snapshot.isDragging}
           isDragDisabled={false}
         >
-          {props.task.content}
+          <BasicCard task={props.task} onChangeColumn={props.onChangeColumn} />
         </Container>
       )}
     </Draggable>

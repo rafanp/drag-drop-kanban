@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { Task } from './Task';
 import { Droppable } from 'react-beautiful-dnd';
 
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import Stack from '@mui/material/Stack';
+
 const Container = styled.div`
   margin: 8px;
   border: 1px solid lightgrey;
@@ -35,15 +39,16 @@ const TaskList: React.FC<TaskListProps> = (props) => {
 
 interface ColumnProps {
   column: {
-    title: string;
+    titulo: string;
+    cadAddNewTask: boolean;
     id: string;
   };
-  tasks: { id: string; content: string }[];
+  tasks: { id: string; conteudo: string; titulo: string }[];
   onChange?: any;
 }
 
 export const Column: React.FC<ColumnProps> = (props) => {
-  const { onChange } = props;
+  const { onChange, column } = props;
 
   const onChangeColumn = (result: any) => {
     const { column, index, task, buttonClick } = result;
@@ -60,7 +65,18 @@ export const Column: React.FC<ColumnProps> = (props) => {
 
   return (
     <Container>
-      <Title>{props.column.title}</Title>
+      <Stack direction="row" spacing={1} alignItems="center">
+        <Title>{props.column.titulo}</Title>
+        {column.cadAddNewTask && (
+          <IconButton
+            aria-label="right"
+            // onClick={() => props.onChangeColumn('next')}
+          >
+            <AddIcon />
+          </IconButton>
+        )}
+      </Stack>
+
       <Droppable droppableId={props.column.id} type="TASK">
         {(provided, snapshot) => (
           <TaskList
@@ -71,31 +87,19 @@ export const Column: React.FC<ColumnProps> = (props) => {
             {props.tasks.map((task: any, index) => {
               return (
                 <div>
-                  <button
-                    onClick={() =>
+                  <Task
+                    key={task.id}
+                    task={task}
+                    index={index}
+                    onChangeColumn={(actionType: string) =>
                       onChangeColumn({
                         task,
                         index,
                         column: props.column,
-                        buttonClick: 'back',
+                        buttonClick: actionType,
                       })
                     }
-                  >
-                    esquerda
-                  </button>
-                  <Task key={task.id} task={task} index={index} />
-                  <button
-                    onClick={() =>
-                      onChangeColumn({
-                        task,
-                        index,
-                        column: props.column,
-                        buttonClick: 'next',
-                      })
-                    }
-                  >
-                    direita
-                  </button>
+                  />
                 </div>
               );
             })}

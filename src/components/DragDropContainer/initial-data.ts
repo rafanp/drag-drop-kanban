@@ -1,35 +1,43 @@
 interface TaskLayout {
-  tasks: { id: string; content: string }[];
-  columns: { id: string; title: string; taskIds: string[] }[];
+  tasks: { id: string; conteudo: string; titulo: string }[];
+  columns: {
+    id: string;
+    titulo: string;
+    taskIds: string[];
+    cadAddNewTask: boolean;
+  }[];
   columnOrder: string[];
 }
 
 const initialData: TaskLayout = {
   tasks: [
-    { id: 'task-1', content: 'Take out the garbage' },
-    { id: 'task-2', content: 'Watch my favorite show' },
-    { id: 'task-3', content: 'Charge my phone' },
-    { id: 'task-4', content: 'Cook dinner' },
+    { id: 'task-1', conteudo: 'Take out the garbage', titulo: 'Titulo' },
+    { id: 'task-2', conteudo: 'Watch my favorite show', titulo: 'Titulo' },
+    { id: 'task-3', conteudo: 'Charge my phone', titulo: 'Titulo' },
+    { id: 'task-4', conteudo: 'Cook dinner', titulo: 'Titulo' },
   ],
   columns: [
     {
-      id: 'column-1',
-      title: 'Todo',
+      id: 'ToDo',
+      titulo: 'Todo',
+      cadAddNewTask: true,
       taskIds: ['task-1', 'task-2'],
     },
     {
-      id: 'column-2',
-      title: 'Doing',
+      id: 'Doing',
+      titulo: 'Doing',
+      cadAddNewTask: false,
       taskIds: ['task-3'],
     },
     {
-      id: 'column-3',
-      title: 'Done',
+      id: 'Done',
+      titulo: 'Done',
+      cadAddNewTask: false,
       taskIds: ['task-4'],
     },
   ],
   // Facilitate reordering of the columns
-  columnOrder: ['column-1', 'column-2', 'column-3'],
+  columnOrder: ['ToDo', 'Doing', 'Done'],
 };
 
 export default initialData;

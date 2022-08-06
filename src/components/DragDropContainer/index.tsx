@@ -97,32 +97,34 @@ export default function DragAn() {
   };
 
   return (
-    <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
-      <Container>
-        {state.columnOrder.map((columnId: string) => {
-          if (state.columns === undefined) return [];
+    <div>
+      <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
+        <Container>
+          {state.columnOrder.map((columnId: string) => {
+            if (state.columns === undefined) return [];
 
-          const column = state.columns.find((x) => x.id === columnId);
+            const column = state.columns.find((x) => x.id === columnId);
 
-          if (column === undefined) return <></>;
+            if (column === undefined) return <></>;
 
-          let tasks: { id: string; content: string }[] = [];
+            let tasks: { id: string; conteudo: string; titulo: string }[] = [];
 
-          for (const taskId of column!.taskIds) {
-            const foundTask = state.tasks.find((x) => x.id === taskId);
-            if (foundTask) tasks.push(foundTask);
-          }
+            for (const taskId of column!.taskIds) {
+              const foundTask = state.tasks.find((x) => x.id === taskId);
+              if (foundTask) tasks.push(foundTask);
+            }
 
-          return (
-            <Column
-              key={column!.id}
-              column={column}
-              tasks={tasks}
-              onChange={onDragEnd}
-            />
-          );
-        })}
-      </Container>
-    </DragDropContext>
+            return (
+              <Column
+                key={column!.id}
+                column={column}
+                tasks={tasks}
+                onChange={onDragEnd}
+              />
+            );
+          })}
+        </Container>
+      </DragDropContext>
+    </div>
   );
 }
