@@ -79,7 +79,7 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
     return result;
   };
 
-  const updateTask = (task: ITask) => {
+  const onChangeTaskState = (task: ITask) => {
     const index = tasks.findIndex((item) => item.id === task.id);
     if (index < 0) {
       return;
@@ -89,10 +89,6 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
     updatedTasks[index] = task;
 
     setTasks(updatedTasks);
-    // updatedTask.editMode = true;
-
-    // task.lista = target.droppableId;
-    // api.put(`/cards/${draggableId}`, task);
   };
 
   const saveTaskEdit = (task: ITask) => {
@@ -101,22 +97,12 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
       return;
     }
 
-    const newValue = { ...task, ...task.editMode };
-    delete newValue.editMode;
-
-    // const updatedTasks = [...tasks];
-    // updatedTasks[index] = task;
-    // console.log('updatedTasks :', updatedTasks);
-
-    // setTasks(updatedTasks);
+    const newValue = { ...task, ...task.editForm };
+    delete newValue.editForm;
 
     api.put(`/cards/${task.id}`, newValue);
 
-    updateTask(newValue);
-    // updatedTask.editMode = true;
-
-    // task.lista = target.droppableId;
-    // api.put(`/cards/${draggableId}`, task);
+    onChangeTaskState(newValue);
   };
 
   const onDragEnd = (result: any) => {
@@ -210,66 +196,6 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
     loadTasks();
   }, []);
 
-  // const [openFamilyDialog, setOpenFamilyDialog] = useState(false);
-  // const [familyForm, setFamilyForm] = useState(defaultFamily);
-
-  // const editFamily = async (familyForm) => {
-  //   setOpenFamilyDialog(true);
-  //   setFamilyForm(familyForm);
-  // };
-
-  // const clearFamilyData = async () => {
-  //   setFamilyForm(defaultFamily);
-  // };
-
-  // const changeFamily = async (field, data) => {
-  //   setFamilyForm((prevState) => ({
-  //     ...prevState,
-  //     [field]: data,
-  //   }));
-  // };
-
-  // const changeMember = async (index, field, data) => {
-  //   const updatedForm = { ...familyForm };
-  //   updatedForm.members[index] = {
-  //     ...updatedForm.members[index],
-  //     [field]: data,
-  //   };
-
-  //   setFamilyForm(updatedForm);
-  // };
-
-  // const addNewMemberField = async () => {
-  //   setFamilyForm((prevState) => ({
-  //     ...prevState,
-  //     members: [...prevState.members, defaultMember],
-  //   }));
-  // };
-
-  // const removeMemberField = async (index) => {
-  //   const removedForm = { ...familyForm };
-  //   removedForm.members.splice(index, 1);
-  //   setFamilyForm(removedForm);
-  // };
-
-  //   const saveTodo = (todo: ITodo) => {
-  //   const newTodo: ITodo = {
-  //     id: Math.random(), // not really unique - but fine for this example
-  //     title: todo.title,
-  //     description: todo.description,
-  //     status: false,
-  //   }
-  //   setTodos([...todos, newTodo])
-  // }
-
-  // const updateTodo = (id: number) => {
-  //   todos.filter((todo: ITodo) => {
-  //     if (todo.id === id) {
-  //       todo.status = true
-  //       setTodos([...todos])
-  //     }
-  //   })
-  // }
   return (
     <KanbanContext.Provider
       value={{
@@ -278,7 +204,7 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
         onDragEnd,
         createTask,
         deleteTask,
-        updateTask,
+        onChangeTaskState,
         saveTaskEdit,
       }}
     >

@@ -25,6 +25,7 @@ export default function PositionedPopper() {
   };
 
   const onClickConfirm = async (data: any) => {
+    console.log('data :', data);
     try {
       const result = await createTask(data);
       setOpen(false);
@@ -41,7 +42,7 @@ export default function PositionedPopper() {
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
               <BasicCard
-                task={{ titulo: 'qwe' }}
+                task={{ editForm: { titulo: '', conteudo: '' } }}
                 type="new"
                 onCancel={() => setOpen((previousOpen) => !previousOpen)}
                 onConfirm={(e: any) => onClickConfirm(e)}

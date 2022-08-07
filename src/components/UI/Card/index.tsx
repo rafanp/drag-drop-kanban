@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import IconButton from '@mui/material/IconButton';
@@ -15,6 +14,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SaveIcon from '@mui/icons-material/Save';
 import { Grid, TextField } from '@mui/material';
+import { KanbanContext } from '../../../contexts/kanban/provider';
+import { KanbanContextType } from '../../../@types/task';
 
 interface TaskContent {
   id?: string;
@@ -22,20 +23,51 @@ interface TaskContent {
   titulo: string;
 }
 const EditContent = (props: any) => {
-  const [data, setData] = useState<TaskContent>({ conteudo: '', titulo: '' });
+  console.log('props :', props);
+  const [newTaskForm, setNewTaskForm] = useState<TaskContent>({
+    conteudo: '',
+    titulo: '',
+  });
+  const { onChangeTaskState, saveTaskEdit } = useContext(
+    KanbanContext
+  ) as KanbanContextType;
+
+  const { task } = props;
 
   const onChange = (e: any) => {
-    setData((previousData) => ({
-      ...previousData,
-      [e.target.id]: e.target.value,
-    }));
+    if (props.type === 'new') {
+      setNewTaskForm((previousData) => ({
+        ...previousData,
+        [e.target.id]: e.target.value,
+      }));
+    }
+
+    const newValue = {
+      ...task,
+      editForm: {
+        ...task.editForm,
+        [e.target.id]: e.target.value,
+      },
+    };
+
+    onChangeTaskState(newValue);
   };
 
-  //   const onClickConfirm = async (data: TaskContent) => {
+  const onCancelEditTask = () => {
+    const newValue = { ...props.task };
+    delete newValue.editForm;
+    onChangeTaskState(newValue);
+  };
 
-  //     await props.onConfirm(data);
-
-  //   }
+  const onClickSaveButton = () => {
+    console.log('onClick save');
+    if (props.onConfirm) {
+      console.log('if');
+      return props.onConfirm(newTaskForm);
+    }
+    saveTaskEdit(task);
+    // props.onClickConfirm || saveTaskEdit(task)
+  };
 
   return (
     <>
@@ -47,7 +79,7 @@ const EditContent = (props: any) => {
               placeholder="Título"
               variant="standard"
               onChange={onChange}
-              value={data.titulo}
+              value={task?.editForm?.titulo || newTaskForm.titulo}
             />
           </Grid>
           <Grid item>
@@ -56,7 +88,7 @@ const EditContent = (props: any) => {
               placeholder="Conteúdo"
               multiline
               onChange={onChange}
-              value={data.conteudo}
+              value={task?.editForm?.conteudo || newTaskForm.conteudo}
             />
           </Grid>
         </Grid>
@@ -72,11 +104,11 @@ const EditContent = (props: any) => {
         >
           <IconButton
             aria-label="Clear"
-            onClick={props.onCancel || props.switchEditMode}
+            onClick={props.onCancel || onCancelEditTask}
           >
             <ClearIcon />
           </IconButton>
-          <IconButton aria-label="right" onClick={() => props.onConfirm(data)}>
+          <IconButton aria-label="right" onClick={() => onClickSaveButton()}>
             <SaveIcon />
           </IconButton>
         </Box>
@@ -86,6 +118,18 @@ const EditContent = (props: any) => {
 };
 
 const ViewContent = (props: any) => {
+  const { onChangeTaskState } = useContext(KanbanContext) as KanbanContextType;
+
+  const { task } = props;
+
+  const onChangeEdit = () => {
+    const newValue = {
+      ...task,
+      editForm: { titulo: task.titulo, conteudo: task.conteudo },
+    };
+    onChangeTaskState(newValue);
+  };
+
   return (
     <>
       <CardContent>
@@ -100,7 +144,7 @@ const ViewContent = (props: any) => {
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             {props?.task?.titulo}
           </Typography>
-          <IconButton aria-label="right" onClick={() => props.switchEditMode()}>
+          <IconButton aria-label="right" onClick={() => onChangeEdit()}>
             <EditIcon />
           </IconButton>
         </Box>
@@ -137,45 +181,12 @@ const ViewContent = (props: any) => {
 };
 
 const BasicCard = (props: any) => {
-  const [edit, setEdit] = useState(false);
-  const editable = props.type === 'new' || edit;
+  const { onChangeTaskState } = useContext(KanbanContext) as KanbanContextType;
+
+  const editable = props.type === 'new' || props.task.editForm;
   return (
     <Card sx={{ minWidth: 200 }} {...props}>
-      {editable ? (
-        <EditContent switchEditMode={() => setEdit(false)} {...props} />
-      ) : (
-        <ViewContent
-          task={props.task}
-          switchEditMode={() => setEdit(true)}
-          {...props}
-        />
-      )}
-
-      {/* <CardActions>
-        {props?.type !== 'new' && (
-          <Stack direction="row" spacing={1}>
-            <IconButton
-              aria-label="left"
-              onClick={() => props.onChangeColumn('back')}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
-            <IconButton
-              aria-label="delete"
-              //   color="primary"
-              onClick={() => props.onDelete(props.task.id)}
-            >
-              <DeleteIcon />
-            </IconButton>
-            <IconButton
-              aria-label="right"
-              onClick={() => props.onChangeColumn('next')}
-            >
-              <ChevronRightIcon />
-            </IconButton>
-          </Stack>
-        )}
-      </CardActions> */}
+      {editable ? <EditContent {...props} /> : <ViewContent {...props} />}
     </Card>
   );
 };

@@ -3,7 +3,7 @@ export interface ITask {
   conteudo: string;
   titulo: string;
   lista: string;
-  editMode?: { conteudo: string; titulo: string };
+  editForm?: { conteudo: string; titulo: string };
 }
 
 export interface IColumn {
@@ -25,7 +25,7 @@ export type KanbanContextType = {
   onDragEnd: (props: any) => void;
   createTask: (props: any) => void;
   deleteTask: (props: any) => void;
-  updateTask: (props: any) => void;
+  onChangeTaskState: (props: any) => void;
   saveTaskEdit: (props: any) => void;
   // columnOrder:
   // saveTodo: (todo: ITodo) => void;
