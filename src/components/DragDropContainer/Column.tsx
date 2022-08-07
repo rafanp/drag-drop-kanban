@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import PositionedPopper from '../UI/Popper/CreateNewTask';
+import { ITask } from '../../@types/task';
 
 const Container = styled.div`
   margin: 8px;
@@ -44,7 +45,7 @@ interface ColumnProps {
     cadAddNewTask: boolean;
     id: string;
   };
-  tasks: { id: string; conteudo: string; titulo: string }[];
+  tasks: ITask[];
   onChange?: any;
   onConfirm?: any;
   onDelete?: any;
