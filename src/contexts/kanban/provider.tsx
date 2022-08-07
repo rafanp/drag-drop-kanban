@@ -79,7 +79,45 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
     return result;
   };
 
-  const updateTask = () => {};
+  const updateTask = (task: ITask) => {
+    const index = tasks.findIndex((item) => item.id === task.id);
+    if (index < 0) {
+      return;
+    }
+
+    const updatedTasks = [...tasks];
+    updatedTasks[index] = task;
+
+    setTasks(updatedTasks);
+    // updatedTask.editMode = true;
+
+    // task.lista = target.droppableId;
+    // api.put(`/cards/${draggableId}`, task);
+  };
+
+  const saveTaskEdit = (task: ITask) => {
+    const index = tasks.findIndex((item) => item.id === task.id);
+    if (index < 0) {
+      return;
+    }
+
+    const newValue = { ...task, ...task.editMode };
+    delete newValue.editMode;
+
+    // const updatedTasks = [...tasks];
+    // updatedTasks[index] = task;
+    // console.log('updatedTasks :', updatedTasks);
+
+    // setTasks(updatedTasks);
+
+    api.put(`/cards/${task.id}`, newValue);
+
+    updateTask(newValue);
+    // updatedTask.editMode = true;
+
+    // task.lista = target.droppableId;
+    // api.put(`/cards/${draggableId}`, task);
+  };
 
   const onDragEnd = (result: any) => {
     const { destination, source, draggableId, buttonClick } = result;
@@ -234,7 +272,15 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
   // }
   return (
     <KanbanContext.Provider
-      value={{ tasks, columns, onDragEnd, createTask, deleteTask, updateTask }}
+      value={{
+        tasks,
+        columns,
+        onDragEnd,
+        createTask,
+        deleteTask,
+        updateTask,
+        saveTaskEdit,
+      }}
     >
       {children}
     </KanbanContext.Provider>

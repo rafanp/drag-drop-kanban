@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Task } from './Task';
 import { Droppable } from 'react-beautiful-dnd';
 
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import PositionedPopper from '../UI/Popper/CreateNewTask';
-import { ITask } from '../../@types/task';
+import { ITask, KanbanContextType } from '../../@types/task';
+import { KanbanContext } from '../../contexts/kanban/provider';
 
 const Container = styled.div`
   margin: 8px;
@@ -46,13 +45,12 @@ interface ColumnProps {
     id: string;
   };
   tasks: ITask[];
-  onChange?: any;
-  onConfirm?: any;
-  onDelete?: any;
 }
 
 export const Column: React.FC<ColumnProps> = (props) => {
-  const { onChange, onDelete, column } = props;
+  const { onDragEnd, deleteTask } = useContext(
+    KanbanContext
+  ) as KanbanContextType;
 
   const onChangeColumn = (result: any) => {
     const { column, index, task, buttonClick } = result;
@@ -64,24 +62,14 @@ export const Column: React.FC<ColumnProps> = (props) => {
       draggableId: task.id,
       buttonClick,
     };
-    onChange(query);
-  };
-
-  const onDeleteTask = (result: any) => {
-    console.log('result :', result);
-    onDelete(result);
+    onDragEnd(query);
   };
 
   return (
     <Container>
       <Stack direction="row" spacing={1} alignItems="center">
         <Title>{props.column.titulo}</Title>
-        {column.cadAddNewTask && (
-          <PositionedPopper createNewTask={props.onConfirm} />
-          // <IconButton aria-label="right" onClick={() => props.addNewTask()}>
-          //   <AddIcon />
-          // </IconButton>
-        )}
+        {props.column.cadAddNewTask && <PositionedPopper />}
       </Stack>
 
       <Droppable droppableId={props.column.id} type="TASK">
@@ -98,8 +86,8 @@ export const Column: React.FC<ColumnProps> = (props) => {
                     key={task.id}
                     task={task}
                     index={index}
-                    onDelete={(taskId: string) =>
-                      onDeleteTask({ task, index, column: props.column })
+                    onDelete={() =>
+                      deleteTask({ task, index, column: props.column })
                     }
                     onChangeColumn={(actionType: string) =>
                       onChangeColumn({

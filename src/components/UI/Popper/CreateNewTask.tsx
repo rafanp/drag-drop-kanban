@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Popper, { PopperPlacementType } from '@mui/material/Popper';
 import Typography from '@mui/material/Typography';
@@ -9,8 +9,12 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import BasicCard from '../Card';
+import { KanbanContext } from '../../../contexts/kanban/provider';
+import { KanbanContextType } from '../../../@types/task';
 
-export default function PositionedPopper(props: any) {
+export default function PositionedPopper() {
+  const { createTask } = useContext(KanbanContext) as KanbanContextType;
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const [open, setOpen] = React.useState(false);
@@ -22,7 +26,7 @@ export default function PositionedPopper(props: any) {
 
   const onClickConfirm = async (data: any) => {
     try {
-      const result = await props.createNewTask(data);
+      const result = await createTask(data);
       setOpen(false);
       return result;
     } catch (err) {

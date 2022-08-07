@@ -44,9 +44,9 @@ const DragDropContainer = () => {
                 key={column!.id}
                 column={column}
                 tasks={selectedTasks}
-                onChange={onDragEnd}
-                onConfirm={createTask}
-                onDelete={deleteTask}
+                // onChange={onDragEnd}
+                // onConfirm={createTask}
+                // onDelete={deleteTask}
               />
             );
           })}
