@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import ProTip from './components/ProTip';
-import DragDropContainer from './components/DragDropContainer';
+import DragDropContainer from './components/DragDropContainer/DragDropContainer';
 import KanbanProvider from './contexts/kanban/provider';
 
 const App = () => {
   return (
     <KanbanProvider>
-      <Container maxWidth="sm">
+      <Container>
         <Box sx={{ my: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Create React App example with TypeScript
+          <Typography
+            variant="h4"
+            component="h1"
+            fontWeight="bold"
+            color="primary"
+            gutterBottom
+          >
+            Drag N Drop Kanban
           </Typography>
-          <ProTip />
         </Box>
         <DragDropContainer />
       </Container>

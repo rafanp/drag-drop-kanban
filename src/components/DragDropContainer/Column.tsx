@@ -1,38 +1,12 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
 import { Task } from './Task';
 import { Droppable } from 'react-beautiful-dnd';
 
 import Stack from '@mui/material/Stack';
-import PositionedPopper from '../UI/Popper/CreateNewTask';
-import { ITask, KanbanContextType } from '../../@types/task';
+import { ITask, KanbanContextType, TaskListProps } from '../../@types/task';
 import { KanbanContext } from '../../contexts/kanban/provider';
-
-const Container = styled.div`
-  margin: 8px;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-  width: 220px;
-  display: flex;
-  flex-direction: column;
-`;
-const Title = styled.h3`
-  padding: 8px;
-`;
-
-interface TaskListProps {
-  isDraggingOver: boolean;
-  innerRef: any;
-  children: any;
-}
-
-const StyledTaskList = styled.div<TaskListProps>`
-  padding: 8px;
-  transition: background-color 0.2s ease;
-  background-color: ${(props) => (props.isDraggingOver ? 'skyblue' : 'white')};
-  flex-grow: 1;
-  min-height: 100px;
-`;
+import CreateTaskPopper from '../UI/Popper/CreateNewTaskPopper';
+import { Container, StyledTaskList, Title } from './styles';
 
 const TaskList: React.FC<TaskListProps> = (props) => {
   return <StyledTaskList ref={props.innerRef} {...props} />;
@@ -69,7 +43,7 @@ export const Column: React.FC<ColumnProps> = (props) => {
     <Container>
       <Stack direction="row" spacing={1} alignItems="center">
         <Title>{props.column.titulo}</Title>
-        {props.column.cadAddNewTask && <PositionedPopper />}
+        {props.column.cadAddNewTask && <CreateTaskPopper />}
       </Stack>
 
       <Droppable droppableId={props.column.id} type="TASK">

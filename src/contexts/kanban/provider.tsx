@@ -1,14 +1,10 @@
-import {
-  useReducer,
-  useContext,
-  createContext,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
+import { useContext, createContext, useState, useEffect } from 'react';
 
 import { IColumn, ITask, KanbanContextType } from '../../@types/task';
-import initialData from '../../components/DragDropContainer/initial-data';
+import {
+  columnOrder,
+  initialColumns,
+} from '../../components/DragDropContainer/config';
 import api from '../../services/api';
 
 export const KanbanContext = createContext<KanbanContextType | null>(null);
@@ -17,17 +13,14 @@ interface Props {
   children: React.ReactNode;
 }
 
-const columnOrder = ['ToDo', 'Doing', 'Done'];
-
 const KanbanProvider: React.FC<Props> = ({ children }) => {
   const [tasks, setTasks] = useState<ITask[]>([]);
   const [columns, setColumns] = useState<IColumn[]>([]);
 
   const loadTasks = async () => {
     const tasksLoaded = await api.get('/cards');
-    console.log('tasksLoaded :', tasksLoaded);
 
-    const columns = [...initialData.columns];
+    const columns = [...initialColumns];
 
     tasksLoaded.data.forEach((task: any) => {
       const findIndex = columns.findIndex((y) => task.lista === y.id);

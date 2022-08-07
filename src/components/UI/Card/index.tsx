@@ -24,7 +24,6 @@ interface TaskContent {
   titulo: string;
 }
 const EditContent = (props: any) => {
-  console.log('props :', props);
   const [newTaskForm, setNewTaskForm] = useState<TaskContent>({
     conteudo: '',
     titulo: '',
@@ -61,13 +60,11 @@ const EditContent = (props: any) => {
   };
 
   const onClickSaveButton = () => {
-    console.log('onClick save');
     if (props.onConfirm) {
       console.log('if');
       return props.onConfirm(newTaskForm);
     }
     saveTaskEdit(task);
-    // props.onClickConfirm || saveTaskEdit(task)
   };
 
   return (
@@ -142,7 +139,11 @@ const ViewContent = (props: any) => {
             justifyContent: 'space-between',
           }}
         >
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          <Typography
+            sx={{ fontSize: 16, fontWeight: 'bold' }}
+            color="primary"
+            gutterBottom
+          >
             {props?.task?.titulo}
           </Typography>
           <IconButton aria-label="right" onClick={() => onChangeEdit()}>
@@ -151,7 +152,6 @@ const ViewContent = (props: any) => {
         </Box>
 
         <Markdown text={props.task.conteudo} />
-        {/* <Typography variant="body2">{props?.task?.conteudo}</Typography> */}
       </CardContent>
       <CardActions>
         {props?.type !== 'new' && (
@@ -183,8 +183,6 @@ const ViewContent = (props: any) => {
 };
 
 const BasicCard = (props: any) => {
-  const { onChangeTaskState } = useContext(KanbanContext) as KanbanContextType;
-
   const editable = props.type === 'new' || props.task.editForm;
   return (
     <Card sx={{ minWidth: 200 }} {...props}>

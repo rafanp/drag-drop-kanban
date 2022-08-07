@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { Draggable } from 'react-beautiful-dnd';
-import BasicCard from '../UI/Card';
+import TaskCard from '../TaskCard';
 
 interface ContainerProps {
   isDragDisabled: boolean;
@@ -35,7 +35,7 @@ export const Task: React.FC<TaskProps> = (props) => {
           isDragging={snapshot.isDragging}
           isDragDisabled={false}
         >
-          <BasicCard
+          <TaskCard
             task={props.task}
             onChangeColumn={props.onChangeColumn}
             onDelete={props.onDelete}

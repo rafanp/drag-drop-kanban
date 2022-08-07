@@ -19,6 +19,12 @@ export interface ITaskLayout {
   columnOrder: string[];
 }
 
+export interface TaskListProps {
+  isDraggingOver: boolean;
+  innerRef: any;
+  children: any;
+}
+
 export type KanbanContextType = {
   tasks: ITask[];
   columns: IColumn[];

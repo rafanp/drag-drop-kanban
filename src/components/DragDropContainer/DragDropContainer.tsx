@@ -1,21 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import styled from 'styled-components';
 
-import initialData from './initial-data';
 import { Column } from './Column';
-import api from '../../services/api';
 import { KanbanContext } from '../../contexts/kanban/provider';
 import { ITask, KanbanContextType } from '../../@types/task';
-
-const Container = styled.div`
-  display: flex;
-`;
-
-const columnOrder = ['ToDo', 'Doing', 'Done'];
+import { columnOrder } from './config';
+import { Box } from '@mui/material';
 
 const DragDropContainer = () => {
-  const { tasks, columns, onDragEnd, createTask, deleteTask } = useContext(
+  const { tasks, columns, onDragEnd } = useContext(
     KanbanContext
   ) as KanbanContextType;
 
@@ -24,7 +17,7 @@ const DragDropContainer = () => {
   return (
     <div>
       <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
-        <Container>
+        <Box display="flex">
           {columnOrder.map((columnId: string) => {
             if (columns === undefined) return [];
 
@@ -40,17 +33,10 @@ const DragDropContainer = () => {
             }
 
             return (
-              <Column
-                key={column!.id}
-                column={column}
-                tasks={selectedTasks}
-                // onChange={onDragEnd}
-                // onConfirm={createTask}
-                // onDelete={deleteTask}
-              />
+              <Column key={column!.id} column={column} tasks={selectedTasks} />
             );
           })}
-        </Container>
+        </Box>
       </DragDropContext>
     </div>
   );
