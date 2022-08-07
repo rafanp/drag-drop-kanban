@@ -11,7 +11,7 @@ const Container = styled.div`
 `;
 
 interface TaskLayout {
-  tasks: { id: string; conteudo: string; titulo: string }[];
+  tasks: { id: string; conteudo: string; titulo: string; lista: string }[];
   columns: {
     id: string;
     titulo: string;
@@ -30,9 +30,14 @@ export default function DragDropContainer() {
 
     const columns = [...initialData.columns];
 
-    tasksLoaded.data.forEach((x: any) => {
-      const findIndex = columns.findIndex((y) => x.lista === y.id);
-      columns[findIndex].taskIds.push(x.id);
+    tasksLoaded.data.forEach((task: any) => {
+      const findIndex = columns.findIndex((y) => task.lista === y.id);
+      const isTaskAlreadyInColumn = columns[findIndex].taskIds.some(
+        (taskId) => taskId === task.id
+      );
+      if (!isTaskAlreadyInColumn) {
+        columns[findIndex].taskIds.push(task.id);
+      }
     });
 
     const newState = {
@@ -126,6 +131,15 @@ export default function DragDropContainer() {
       ...finish,
       taskIds: finishTaskIds,
     };
+
+    // Alterar na api a task
+    const task = state.tasks.find((task) => task.id === draggableId);
+    if (!task) {
+      return;
+    }
+
+    task.lista = target.droppableId;
+    api.put(`/cards/${draggableId}`, task);
 
     const newState = {
       ...state,

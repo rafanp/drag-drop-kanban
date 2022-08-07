@@ -9,18 +9,54 @@ const api = axios.create({
 
 const request = async (request: any) => {
   // const accessToken = await localStorageService.get(ACCESS_TOKEN_KEY);
-  const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoibGV0c2NvZGUiLCJpYXQiOjE2NTk4MjE2MDUsImV4cCI6MTY1OTgyNTIwNX0.2LcVX2wIceDoTvsX7zf4ZbPwYSOXY5h9QNlHeIhqVh4';
-
-  // if (!accessToken && !request.auth) {
-  //     window.location.replace('#/login');
-  //     return Promise.reject('unauthorized');
+  const accessToken = localStorage.getItem('accessToken');
+  // console.log('request :', request);
+  // if (!accessToken) {
+  //   // window.location.replace('#/login');
+  //   throw new Error('unauthorized');
+  //   // return Promise.reject('unauthorized');
   // }
 
   const authorizationHeader = 'Bearer ' + accessToken;
   request.headers['Authorization'] = authorizationHeader;
 
   return request;
+};
+
+const response = async (res: any) => {
+  return res;
+};
+
+const responseError = async (error: any) => {
+  console.log('error :', error);
+  if (!error.response || !error.response.data) {
+    return Promise.reject(error);
+  }
+
+  const originalRequest = error.config;
+  if (error.response.status === 401) {
+    try {
+      const response = await api.post('/login', {
+        login: 'letscode',
+        senha: 'lets@123',
+      });
+
+      const accessToken = response.data;
+      const authorizationHeader = 'Bearer ' + accessToken;
+      originalRequest.headers['Authorization'] = authorizationHeader;
+
+      localStorage.setItem('accessToken', accessToken);
+
+      console.log('response', response);
+      return axios(originalRequest);
+    } catch (error) {
+      console.error('Error', error);
+    }
+  }
+
+  // const refreshToken = await localStorageService.get(REFRESH_TOKEN_KEY);
+
+  return Promise.reject(error);
 };
 
 // api.interceptors.request.use((config) => {
@@ -36,6 +72,7 @@ const request = async (request: any) => {
 //   return config;
 // });
 
+api.interceptors.response.use(response, responseError);
 api.interceptors.request.use(request);
 
 export default api;

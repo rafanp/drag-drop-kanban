@@ -1,5 +1,5 @@
 interface TaskLayout {
-  tasks: { id: string; conteudo: string; titulo: string }[];
+  tasks: { id: string; conteudo: string; titulo: string; lista: string }[];
   columns: {
     id: string;
     titulo: string;
