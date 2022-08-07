@@ -16,6 +16,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { Grid, TextField } from '@mui/material';
 import { KanbanContext } from '../../../contexts/kanban/provider';
 import { KanbanContextType } from '../../../@types/task';
+import Markdown from '../../Markdown';
 
 interface TaskContent {
   id?: string;
@@ -149,7 +150,8 @@ const ViewContent = (props: any) => {
           </IconButton>
         </Box>
 
-        <Typography variant="body2">{props?.task?.conteudo}</Typography>
+        <Markdown text={props.task.conteudo} />
+        {/* <Typography variant="body2">{props?.task?.conteudo}</Typography> */}
       </CardContent>
       <CardActions>
         {props?.type !== 'new' && (
