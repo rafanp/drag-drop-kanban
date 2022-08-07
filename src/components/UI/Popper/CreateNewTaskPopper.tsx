@@ -6,9 +6,9 @@ import Fade from '@mui/material/Fade';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import BasicCard from '../Card';
 import { KanbanContext } from '../../../contexts/kanban/provider';
 import { KanbanContextType } from '../../../@types/task';
+import TaskCard from '../../TaskCard';
 
 const CreateTaskPopper = () => {
   const { createTask } = useContext(KanbanContext) as KanbanContextType;
@@ -38,7 +38,7 @@ const CreateTaskPopper = () => {
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
-              <BasicCard
+              <TaskCard
                 task={{ editForm: { titulo: '', conteudo: '' } }}
                 type="new"
                 onCancel={() => setOpen((previousOpen) => !previousOpen)}

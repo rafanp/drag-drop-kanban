@@ -22,6 +22,7 @@ const EditContent = (props: any) => {
     conteudo: '',
     titulo: '',
   });
+  const [errors, setErrors] = useState({ conteudo: false, titulo: false });
   const { onChangeTaskState, saveTaskEdit } = useContext(
     KanbanContext
   ) as KanbanContextType;
@@ -47,6 +48,19 @@ const EditContent = (props: any) => {
     onChangeTaskState(newValue);
   };
 
+  const validateFormsField = () => {
+    const errors = {
+      conteudo: !newTaskForm.conteudo,
+      titulo: !newTaskForm.titulo,
+    };
+
+    if (errors.conteudo || errors.titulo) {
+      setErrors(errors);
+    }
+
+    return errors.conteudo || errors.titulo;
+  };
+
   const onCancelEditTask = () => {
     const newValue = { ...props.task };
     delete newValue.editForm;
@@ -54,6 +68,10 @@ const EditContent = (props: any) => {
   };
 
   const onClickSaveButton = () => {
+    if (validateFormsField()) {
+      return;
+    }
+
     if (props.onConfirm) {
       return props.onConfirm(newTaskForm);
     }
@@ -71,6 +89,9 @@ const EditContent = (props: any) => {
               variant="standard"
               onChange={onChange}
               value={task?.editForm?.titulo || newTaskForm.titulo}
+              fullWidth
+              error={errors.titulo}
+              helperText={errors.titulo && 'Campo obrigatório'}
             />
           </Grid>
           <Grid item>
@@ -80,6 +101,10 @@ const EditContent = (props: any) => {
               multiline
               onChange={onChange}
               value={task?.editForm?.conteudo || newTaskForm.conteudo}
+              fullWidth
+              rows={8}
+              error={errors.conteudo}
+              helperText={errors.conteudo && 'Campo obrigatório'}
             />
           </Grid>
         </Grid>

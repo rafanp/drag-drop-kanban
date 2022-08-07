@@ -45,28 +45,26 @@ const ViewContent = (props: any) => {
         <Markdown text={props.task.conteudo} />
       </CardContent>
       <CardActions>
-        {props?.type !== 'new' && (
-          <FlexContainer>
-            <IconButton
-              aria-label="left"
-              onClick={() => props.onChangeColumn('back')}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
-            <IconButton
-              aria-label="delete"
-              onClick={() => props.onDelete(props.task.id)}
-            >
-              <DeleteIcon />
-            </IconButton>
-            <IconButton
-              aria-label="right"
-              onClick={() => props.onChangeColumn('next')}
-            >
-              <ChevronRightIcon />
-            </IconButton>
-          </FlexContainer>
-        )}
+        <FlexContainer>
+          <IconButton
+            aria-label="left"
+            onClick={() => props.onChangeColumn('back')}
+          >
+            <ChevronLeftIcon />
+          </IconButton>
+          <IconButton
+            aria-label="delete"
+            onClick={() => props.onDelete(props.task.id)}
+          >
+            <DeleteIcon />
+          </IconButton>
+          <IconButton
+            aria-label="right"
+            onClick={() => props.onChangeColumn('next')}
+          >
+            <ChevronRightIcon />
+          </IconButton>
+        </FlexContainer>
       </CardActions>
     </>
   );

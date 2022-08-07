@@ -28,12 +28,9 @@ export interface TaskListProps {
 export type KanbanContextType = {
   tasks: ITask[];
   columns: IColumn[];
-  onDragEnd: (props: any) => void;
+  onDragTaskEnd: (props: any) => void;
   createTask: (props: any) => void;
   deleteTask: (props: any) => void;
   onChangeTaskState: (props: any) => void;
   saveTaskEdit: (props: any) => void;
-  // columnOrder:
-  // saveTodo: (todo: ITodo) => void;
-  // updateTodo: (id: number) => void;
 };

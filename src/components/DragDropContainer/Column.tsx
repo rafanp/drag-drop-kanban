@@ -22,7 +22,7 @@ interface ColumnProps {
 }
 
 export const Column: React.FC<ColumnProps> = (props) => {
-  const { onDragEnd, deleteTask } = useContext(
+  const { onDragTaskEnd, deleteTask } = useContext(
     KanbanContext
   ) as KanbanContextType;
 
@@ -36,7 +36,7 @@ export const Column: React.FC<ColumnProps> = (props) => {
       draggableId: task.id,
       buttonClick,
     };
-    onDragEnd(query);
+    onDragTaskEnd(query);
   };
 
   return (

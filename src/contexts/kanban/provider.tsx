@@ -1,11 +1,13 @@
 import { useContext, createContext, useState, useEffect } from 'react';
 
 import { IColumn, ITask, KanbanContextType } from '../../@types/task';
-import {
-  columnOrder,
-  initialColumns,
-} from '../../components/DragDropContainer/config';
+import { initialColumns } from '../../components/DragDropContainer/config';
 import api from '../../services/api';
+import {
+  getTargetColumn,
+  reorderTaskInTheSameColumn,
+  reorderTaskToAnotherColumn,
+} from './helpers';
 
 export const KanbanContext = createContext<KanbanContextType | null>(null);
 
@@ -39,23 +41,23 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
   const createTask = async (task: any) => {
     const newTask = { ...task, lista: 'ToDo' };
 
-    const result = await api.post('/cards', newTask);
+    const response = await api.post('/cards', newTask);
 
     const updatedColumns = [...columns];
     const columnIndex = updatedColumns.findIndex(
       (column) => column.id === 'ToDo'
     );
 
-    updatedColumns[columnIndex].taskIds.push(result.data.id);
+    updatedColumns[columnIndex].taskIds.push(response.data.id);
 
-    setTasks([...tasks, result.data]);
+    setTasks([...tasks, response.data]);
     setColumns(updatedColumns);
 
-    return result;
+    return response;
   };
 
   const deleteTask = async (data: any) => {
-    const result = await api.delete(`/cards/${data.task.id}`);
+    const response = await api.delete(`/cards/${data.task.id}`);
 
     const newTasks = tasks.filter((task) => task.id !== data.task.id);
     const updatedColumns = [...columns];
@@ -69,7 +71,7 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
     setTasks(newTasks);
     setColumns(updatedColumns);
 
-    return result;
+    return response;
   };
 
   const onChangeTaskState = (task: ITask) => {
@@ -98,33 +100,31 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
     onChangeTaskState(newValue);
   };
 
-  const onDragEnd = (result: any) => {
+  const updateTaskColumn = async ({ draggableId, target }: any) => {
+    const task = tasks.find((task) => task.id === draggableId);
+    if (!task) {
+      return;
+    }
+
+    task.lista = target.droppableId;
+    const response = await api.put(`/cards/${draggableId}`, task);
+    return response.data;
+  };
+
+  const onDragTaskEnd = (result: any) => {
     const { destination, source, draggableId, buttonClick } = result;
 
     let target = destination;
 
     if (buttonClick === 'next' || buttonClick === 'back') {
-      const columnIndex = columnOrder.indexOf(source.droppableId);
-
-      const targetColumnId =
-        buttonClick === 'next'
-          ? columnOrder[columnIndex + 1]
-          : columnOrder[columnIndex - 1];
-
-      target = {
-        droppableId: targetColumnId,
-        index: columnOrder.length,
-      };
+      target = getTargetColumn(result);
     }
 
-    if (!target) {
-      return;
-    }
-
-    if (
+    const isTargetIsTheSamePosition =
       target.droppableId === source.droppableId &&
-      target.index === source.index
-    ) {
+      target.index === source.index;
+
+    if (!target || isTargetIsTheSamePosition) {
       return;
     }
 
@@ -134,53 +134,28 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
     if (!start || !finish) return;
 
     if (start === finish) {
-      const newTaskIds = Array.from(start!.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(target.index, 0, draggableId);
-
-      const newColumnsState = [
-        ...columns.filter((x) => x.id !== start!.id),
-        {
-          ...columns.filter((x) => x.id === start!.id)[0],
-          taskIds: newTaskIds,
-        },
-      ];
+      const newColumnsState = reorderTaskInTheSameColumn({
+        start,
+        source,
+        target,
+        columns,
+        draggableId,
+      });
 
       setColumns(newColumnsState);
       return;
     }
 
-    // Moving from one list to another
-    const startTaskIds = Array.from(start!.taskIds);
-    startTaskIds.splice(source.index, 1);
+    const newColumnsState = reorderTaskToAnotherColumn({
+      start,
+      source,
+      target,
+      columns,
+      draggableId,
+      finish,
+    });
 
-    const newStart = {
-      ...start,
-      taskIds: startTaskIds,
-    };
-
-    const finishTaskIds = Array.from(finish!.taskIds);
-    finishTaskIds.splice(target.index, 0, draggableId);
-
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds,
-    };
-
-    // Alterar na api a task
-    const task = tasks.find((task) => task.id === draggableId);
-    if (!task) {
-      return;
-    }
-
-    task.lista = target.droppableId;
-    api.put(`/cards/${draggableId}`, task);
-
-    const newColumnsState = [
-      ...columns.filter((x) => x.id !== start.id && x.id !== finish.id),
-      newStart,
-      newFinish,
-    ];
+    updateTaskColumn({ draggableId, target });
 
     setColumns(newColumnsState);
   };
@@ -194,7 +169,7 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
       value={{
         tasks,
         columns,
-        onDragEnd,
+        onDragTaskEnd,
         createTask,
         deleteTask,
         onChangeTaskState,
