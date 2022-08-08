@@ -16,7 +16,7 @@ const App = () => {
             color="primary"
             gutterBottom
           >
-            Drag N Drop Kanban
+            Let's Code Kanban
           </Typography>
         </Box>
         <DragDropContainer />

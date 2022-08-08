@@ -2,6 +2,7 @@
 
 ## Desafio Técnico - Frontend
 
+![kanban](./public/kanban.png)
 
 ## Rodando o projeto
 
