@@ -2,6 +2,7 @@ import { useContext, createContext, useState, useEffect } from 'react';
 
 import { IColumn, ITask, KanbanContextType } from '../../@types/task';
 import { initialColumns } from '../../components/DragDropContainer/config';
+import { mockedTasks } from '../../mocks/populateTasks';
 import api from '../../services/api';
 import {
   getTargetColumn,
@@ -19,6 +20,18 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
   const [tasks, setTasks] = useState<ITask[]>([]);
   const [columns, setColumns] = useState<IColumn[]>([]);
 
+  const populateTasks = async () => {
+    const response = await Promise.all(
+      mockedTasks.map(async (task) => {
+        const res = await api.post('/cards', task);
+        return res.data;
+      })
+    );
+
+    loadTasks();
+    return response;
+  };
+
   const loadTasks = async () => {
     const tasksLoaded = await api.get('/cards');
 
@@ -33,6 +46,10 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
         columns[findIndex].taskIds.push(task.id);
       }
     });
+
+    if (!tasksLoaded.data.length) {
+      await populateTasks();
+    }
 
     setTasks(tasksLoaded.data);
     setColumns(columns);

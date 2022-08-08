@@ -5,8 +5,8 @@ import { Droppable } from 'react-beautiful-dnd';
 import Stack from '@mui/material/Stack';
 import { ITask, KanbanContextType, TaskListProps } from '../../@types/task';
 import { KanbanContext } from '../../contexts/kanban/provider';
-import CreateTaskPopper from '../UI/Popper/CreateNewTaskPopper';
 import { Container, StyledTaskList, Title } from './styles';
+import CreateTaskPopper from '../Popper/CreateNewTaskPopper';
 
 const TaskList: React.FC<TaskListProps> = (props) => {
   return <StyledTaskList ref={props.innerRef} {...props} />;

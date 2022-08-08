@@ -1,46 +1,50 @@
-# Getting Started with Create React App
+# Let's Code 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Desafio Técnico - Frontend
 
-## Available Scripts
 
-In the project directory, you can run:
+## Rodando o projeto
 
-### `yarn start`
+Front e back estão desacoplados, é necessário rodar os dois separadamente
+### Backend para Testes
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Para executar o backend faça:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```console
+> cd BACK
+> npm install
+> npm run server
+```
 
-### `yarn test`
+Ele responderá às requisições em http://localhost:5000.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Frontend
 
-### `yarn build`
+Para executar o front execute na pasta raiz:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```console
+> yarn
+> yarn start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Projeto será inicializado em http://localhost:3000.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Node e npm -v
+```console
+> node -v  v16.15.0
+> npm -v 8.5.5
+```
 
-### `yarn eject`
+## Detalhes do projeto
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Quadro de Kanban com 3 colunas e cards
+- É possível movimentar os cards utilizando as setas OU arrastando os cards
+- Foi utilizado a lib react-beautiful-dnd para o drag and drop.
+- Os cards podem ser visualizados e editados
+- Os cards devem aceitar Markdown
+- Utilizado Material UI + Emotion para Design System e estilização
+- Devido ao Drag and Drop, parte da lógica deve ficar mais complexa do que se utilizando apenas a navegação por setas
+- Login deve ocorrer de maneira automática em services/api pelo interceptor do axios
+- Kanban será populado sempre que estiver vazio e renderizar pela primeira vez (ou sofrer um F5)
+- A posição dos cards nas colunas não é persistente. Há duas simples soluções, salvar o state do column.taskIds no localStorage/cache OU no backend
+- Todo: Adicionar tratativas de erros e notificações; Melhorar tipagems;

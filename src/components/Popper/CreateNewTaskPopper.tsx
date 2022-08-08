@@ -6,9 +6,9 @@ import Fade from '@mui/material/Fade';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import { KanbanContext } from '../../../contexts/kanban/provider';
-import { KanbanContextType } from '../../../@types/task';
-import TaskCard from '../../TaskCard';
+import TaskCard from '../TaskCard';
+import { KanbanContext } from '../../contexts/kanban/provider';
+import { KanbanContextType } from '../../@types/task';
 
 const CreateTaskPopper = () => {
   const { createTask } = useContext(KanbanContext) as KanbanContextType;

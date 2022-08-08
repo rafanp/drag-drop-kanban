@@ -48,10 +48,10 @@ const EditContent = (props: any) => {
     onChangeTaskState(newValue);
   };
 
-  const validateFormsField = () => {
+  const validateFormsField = (form: TaskContent) => {
     const errors = {
-      conteudo: !newTaskForm.conteudo,
-      titulo: !newTaskForm.titulo,
+      conteudo: !form.conteudo,
+      titulo: !form.titulo,
     };
 
     if (errors.conteudo || errors.titulo) {
@@ -68,13 +68,18 @@ const EditContent = (props: any) => {
   };
 
   const onClickSaveButton = () => {
-    if (validateFormsField()) {
+    if (props.onConfirm) {
+      if (validateFormsField(newTaskForm)) {
+        return;
+      }
+
+      return props.onConfirm(newTaskForm);
+    }
+
+    if (validateFormsField(task.editForm)) {
       return;
     }
 
-    if (props.onConfirm) {
-      return props.onConfirm(newTaskForm);
-    }
     saveTaskEdit(task);
   };
 
