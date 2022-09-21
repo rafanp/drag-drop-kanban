@@ -5,19 +5,19 @@ const columnOrder = ['ToDo', 'Doing', 'Done'];
 const initialColumns: IColumn[] = [
   {
     id: 'ToDo',
-    titulo: 'Todo',
+    title: 'Todo',
     cadAddNewTask: true,
     taskIds: [],
   },
   {
     id: 'Doing',
-    titulo: 'Doing',
+    title: 'Doing',
     cadAddNewTask: false,
     taskIds: [],
   },
   {
     id: 'Done',
-    titulo: 'Done',
+    title: 'Done',
     cadAddNewTask: false,
     taskIds: [],
   },

@@ -14,7 +14,7 @@ const TaskList: React.FC<TaskListProps> = (props) => {
 
 interface ColumnProps {
   column: {
-    titulo: string;
+    title: string;
     cadAddNewTask: boolean;
     id: string;
   };
@@ -33,7 +33,7 @@ export const Column: React.FC<ColumnProps> = (props) => {
         droppableId: column.id,
         index,
       },
-      draggableId: task.id,
+      draggableId: task._id,
       buttonClick,
     };
     onDragTaskEnd(query);
@@ -42,7 +42,7 @@ export const Column: React.FC<ColumnProps> = (props) => {
   return (
     <Container>
       <Stack direction="row" spacing={1} alignItems="center">
-        <Title>{props.column.titulo}</Title>
+        <Title>{props.column.title}</Title>
         {props.column.cadAddNewTask && <CreateTaskPopper />}
       </Stack>
 
@@ -57,7 +57,7 @@ export const Column: React.FC<ColumnProps> = (props) => {
               return (
                 <div>
                   <Task
-                    key={task.id}
+                    key={task._id}
                     task={task}
                     index={index}
                     onDelete={() =>

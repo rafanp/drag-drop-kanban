@@ -4,6 +4,7 @@ import { IColumn, ITask, KanbanContextType } from '../../@types/task';
 import { initialColumns } from '../../components/DragDropContainer/config';
 import { mockedTasks } from '../../mocks/populateTasks';
 import api from '../../services/api';
+import axios from 'axios';
 import {
   getTargetColumn,
   reorderTaskInTheSameColumn,
@@ -33,30 +34,41 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
   };
 
   const loadTasks = async () => {
+    // const response = await axios.post('/api/users/' + 'login', {
+    //   email: 'rafael@gmails.com',
+    //   password: '123456',
+    // });
+
     const tasksLoaded = await api.get('/cards');
+    console.log('tasksLoaded :', tasksLoaded);
 
     const columns = [...initialColumns];
+    console.log('columns :', columns);
 
     tasksLoaded.data.forEach((task: any) => {
-      const findIndex = columns.findIndex((y) => task.lista === y.id);
+      console.log('task :', task);
+      const findIndex = columns.findIndex((y) => task.list === y.id);
+      console.log('findIndex :', findIndex);
       const isTaskAlreadyInColumn = columns[findIndex].taskIds.some(
-        (taskId) => taskId === task.id
+        (taskId) => taskId === task._id
       );
+      console.log('isTaskAlreadyInColumn :', isTaskAlreadyInColumn);
       if (!isTaskAlreadyInColumn) {
-        columns[findIndex].taskIds.push(task.id);
+        columns[findIndex].taskIds.push(task._id);
       }
     });
 
-    if (!tasksLoaded.data.length) {
-      await populateTasks();
-    }
+    // if (!tasksLoaded.data.length) {
+    //   await populateTasks();
+    // }
+    console.log('columns', columns);
 
     setTasks(tasksLoaded.data);
     setColumns(columns);
   };
 
   const createTask = async (task: any) => {
-    const newTask = { ...task, lista: 'ToDo' };
+    const newTask = { ...task, list: 'ToDo' };
 
     const response = await api.post('/cards', newTask);
 
@@ -74,15 +86,15 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
   };
 
   const deleteTask = async (data: any) => {
-    const response = await api.delete(`/cards/${data.task.id}`);
+    const response = await api.delete(`/cards/${data.task._id}`);
 
-    const newTasks = tasks.filter((task) => task.id !== data.task.id);
+    const newTasks = tasks.filter((task) => task._id !== data.task._id);
     const updatedColumns = [...columns];
     const columnIndex = updatedColumns.findIndex(
       (column) => column.id === data.column.id
     );
     updatedColumns[columnIndex].taskIds.filter(
-      (taskId) => taskId !== data.task.id
+      (taskId) => taskId !== data.task._id
     );
 
     setTasks(newTasks);
@@ -92,7 +104,7 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
   };
 
   const onChangeTaskState = (task: ITask) => {
-    const index = tasks.findIndex((item) => item.id === task.id);
+    const index = tasks.findIndex((item) => item._id === task._id);
     if (index < 0) {
       return;
     }
@@ -104,7 +116,7 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
   };
 
   const saveTaskEdit = (task: ITask) => {
-    const index = tasks.findIndex((item) => item.id === task.id);
+    const index = tasks.findIndex((item) => item._id === task._id);
     if (index < 0) {
       return;
     }
@@ -112,18 +124,18 @@ const KanbanProvider: React.FC<Props> = ({ children }) => {
     const newValue = { ...task, ...task.editForm };
     delete newValue.editForm;
 
-    api.put(`/cards/${task.id}`, newValue);
+    api.put(`/cards/${task._id}`, newValue);
 
     onChangeTaskState(newValue);
   };
 
   const updateTaskColumn = async ({ draggableId, target }: any) => {
-    const task = tasks.find((task) => task.id === draggableId);
+    const task = tasks.find((task) => task._id === draggableId);
     if (!task) {
       return;
     }
 
-    task.lista = target.droppableId;
+    task.list = target.droppableId;
     const response = await api.put(`/cards/${draggableId}`, task);
     return response.data;
   };

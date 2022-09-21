@@ -39,7 +39,7 @@ const CreateTaskPopper = () => {
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
               <TaskCard
-                task={{ editForm: { titulo: '', conteudo: '' } }}
+                task={{ editForm: { title: '', content: '' } }}
                 type="new"
                 onCancel={() => setOpen((previousOpen) => !previousOpen)}
                 onConfirm={(e: any) => onClickConfirm(e)}

@@ -13,16 +13,16 @@ import { FlexContainer } from './styles';
 
 interface TaskContent {
   id?: string;
-  conteudo: string;
-  titulo: string;
+  content: string;
+  title: string;
 }
 
 const EditContent = (props: any) => {
   const [newTaskForm, setNewTaskForm] = useState<TaskContent>({
-    conteudo: '',
-    titulo: '',
+    content: '',
+    title: '',
   });
-  const [errors, setErrors] = useState({ conteudo: false, titulo: false });
+  const [errors, setErrors] = useState({ content: false, title: false });
   const { onChangeTaskState, saveTaskEdit } = useContext(
     KanbanContext
   ) as KanbanContextType;
@@ -50,15 +50,15 @@ const EditContent = (props: any) => {
 
   const validateFormsField = (form: TaskContent) => {
     const errors = {
-      conteudo: !form.conteudo,
-      titulo: !form.titulo,
+      content: !form.content,
+      title: !form.title,
     };
 
-    if (errors.conteudo || errors.titulo) {
+    if (errors.content || errors.title) {
       setErrors(errors);
     }
 
-    return errors.conteudo || errors.titulo;
+    return errors.content || errors.title;
   };
 
   const onCancelEditTask = () => {
@@ -89,27 +89,27 @@ const EditContent = (props: any) => {
         <Grid container direction="column" spacing={4}>
           <Grid item>
             <TextField
-              id="titulo"
+              id="title"
               placeholder="Título"
               variant="standard"
               onChange={onChange}
-              value={task?.editForm?.titulo || newTaskForm.titulo}
+              value={task?.editForm?.title || newTaskForm.title}
               fullWidth
-              error={errors.titulo}
-              helperText={errors.titulo && 'Campo obrigatório'}
+              error={errors.title}
+              helperText={errors.title && 'Campo obrigatório'}
             />
           </Grid>
           <Grid item>
             <TextField
-              id="conteudo"
+              id="content"
               placeholder="Conteúdo"
               multiline
               onChange={onChange}
-              value={task?.editForm?.conteudo || newTaskForm.conteudo}
+              value={task?.editForm?.content || newTaskForm.content}
               fullWidth
               rows={8}
-              error={errors.conteudo}
-              helperText={errors.conteudo && 'Campo obrigatório'}
+              error={errors.content}
+              helperText={errors.content && 'Campo obrigatório'}
             />
           </Grid>
         </Grid>

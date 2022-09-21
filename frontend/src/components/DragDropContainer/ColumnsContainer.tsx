@@ -21,7 +21,7 @@ const ColumnsContainer = () => {
         let selectedTasks: ITask[] = [];
 
         for (const taskId of column!.taskIds) {
-          const foundTask = tasks.find((x) => x.id === taskId);
+          const foundTask = tasks.find((x) => x._id === taskId);
           if (foundTask) selectedTasks.push(foundTask);
         }
 

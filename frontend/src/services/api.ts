@@ -1,11 +1,13 @@
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://localhost:5000',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+// const api = axios.create({
+//   baseURL: 'http://localhost:5000/api',
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+// });
+
+const api = axios;
 
 const request = async (request: any) => {
   const accessToken = localStorage.getItem('accessToken');
@@ -48,7 +50,7 @@ const responseError = async (error: any) => {
   return Promise.reject(error);
 };
 
-api.interceptors.response.use(response, responseError);
-api.interceptors.request.use(request);
+// api.interceptors.response.use(response, responseError);
+// api.interceptors.request.use(request);
 
 export default api;

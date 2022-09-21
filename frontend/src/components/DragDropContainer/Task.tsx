@@ -14,7 +14,7 @@ const Container = styled.div<ContainerProps>`
 `;
 
 interface TaskProps {
-  task: { id: string; content: string };
+  task: { _id: string; content: string };
   index: number;
   onChangeColumn: any;
   onDelete: any;
@@ -23,7 +23,7 @@ interface TaskProps {
 export const Task: React.FC<TaskProps> = (props) => {
   return (
     <Draggable
-      draggableId={props.task.id}
+      draggableId={props.task._id}
       index={props.index}
       isDragDisabled={false}
     >

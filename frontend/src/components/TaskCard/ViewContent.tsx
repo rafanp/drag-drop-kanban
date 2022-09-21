@@ -21,7 +21,7 @@ const ViewContent = (props: any) => {
   const onChangeEdit = () => {
     const newValue = {
       ...task,
-      editForm: { titulo: task.titulo, conteudo: task.conteudo },
+      editForm: { title: task.title, content: task.content },
     };
     onChangeTaskState(newValue);
   };
@@ -35,14 +35,14 @@ const ViewContent = (props: any) => {
             color="primary"
             gutterBottom
           >
-            {props?.task?.titulo}
+            {props?.task?.title}
           </Typography>
           <IconButton aria-label="right" onClick={() => onChangeEdit()}>
             <EditIcon />
           </IconButton>
         </FlexContainer>
 
-        <Markdown text={props.task.conteudo} />
+        <Markdown text={props.task.content} />
       </CardContent>
       <CardActions>
         <FlexContainer>
@@ -54,7 +54,7 @@ const ViewContent = (props: any) => {
           </IconButton>
           <IconButton
             aria-label="delete"
-            onClick={() => props.onDelete(props.task.id)}
+            onClick={() => props.onDelete(props.task._id)}
           >
             <DeleteIcon />
           </IconButton>

@@ -1,14 +1,14 @@
 export interface ITask {
-  id?: string;
-  conteudo: string;
-  titulo: string;
-  lista: string;
-  editForm?: { conteudo: string; titulo: string };
+  _id?: string;
+  content: string;
+  title: string;
+  list: string;
+  editForm?: { content: string; title: string };
 }
 
 export interface IColumn {
   id: string;
-  titulo: string;
+  title: string;
   taskIds: string[];
   cadAddNewTask: boolean;
 }
