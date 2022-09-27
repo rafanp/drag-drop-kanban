@@ -1,27 +1,15 @@
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import DragDropContainer from './components/DragDropContainer/DragDropContainer';
 import KanbanProvider from './contexts/kanban/provider';
-
+import AppRoutes from './routes';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 const App = () => {
   return (
-    <KanbanProvider>
-      <Container>
-        <Box sx={{ my: 4 }}>
-          <Typography
-            variant="h4"
-            component="h1"
-            fontWeight="bold"
-            color="primary"
-            gutterBottom
-          >
-            Let's Code Kanban
-          </Typography>
-        </Box>
-        <DragDropContainer />
-      </Container>
-    </KanbanProvider>
+    <Router>
+      <KanbanProvider>
+        <AppRoutes />
+      </KanbanProvider>
+    </Router>
   );
 };
 
