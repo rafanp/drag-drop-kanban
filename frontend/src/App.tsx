@@ -1,14 +1,16 @@
+import { BrowserRouter as Router } from 'react-router-dom';
 import KanbanProvider from './contexts/kanban/provider';
+import AuthenticationProvider from './contexts/authentication/provider';
 import AppRoutes from './routes';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+
 const App = () => {
   return (
     <Router>
-      <KanbanProvider>
-        <AppRoutes />
-      </KanbanProvider>
+      <AuthenticationProvider>
+        <KanbanProvider>
+          <AppRoutes />
+        </KanbanProvider>
+      </AuthenticationProvider>
     </Router>
   );
 };

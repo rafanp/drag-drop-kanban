@@ -1,7 +1,14 @@
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { useContext } from 'react';
+import { AuthContextType } from '../../@types/authentication';
+import { AuthContext } from '../../contexts/authentication/provider';
+import useAuth from '../../hooks/useAuth';
 
 const MenuItems = ({ anchorEl, handleClose, open }: any) => {
+  // const { onLogout } = useContext(AuthContext) as AuthContextType;
+  const { onLogout } = useAuth();
+
   return (
     <Menu
       id="basic-menu"
@@ -18,7 +25,7 @@ const MenuItems = ({ anchorEl, handleClose, open }: any) => {
       <MenuItem onClick={handleClose} disabled={true}>
         My account
       </MenuItem>
-      <MenuItem onClick={handleClose}>Logout</MenuItem>
+      <MenuItem onClick={() => onLogout()}>Logout</MenuItem>
     </Menu>
   );
 };
