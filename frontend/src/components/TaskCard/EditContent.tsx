@@ -90,26 +90,26 @@ const EditContent = (props: any) => {
           <Grid item>
             <TextField
               id="title"
-              placeholder="Título"
+              placeholder="Title"
               variant="standard"
               onChange={onChange}
               value={task?.editForm?.title || newTaskForm.title}
               fullWidth
               error={errors.title}
-              helperText={errors.title && 'Campo obrigatório'}
+              helperText={errors.title && 'Required field'}
             />
           </Grid>
           <Grid item>
             <TextField
               id="content"
-              placeholder="Conteúdo"
+              placeholder="Content"
               multiline
               onChange={onChange}
               value={task?.editForm?.content || newTaskForm.content}
               fullWidth
               rows={8}
               error={errors.content}
-              helperText={errors.content && 'Campo obrigatório'}
+              helperText={errors.content && 'Required field'}
             />
           </Grid>
         </Grid>

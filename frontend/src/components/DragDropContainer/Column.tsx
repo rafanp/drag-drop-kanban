@@ -5,7 +5,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import Stack from '@mui/material/Stack';
 import { ITask, KanbanContextType, TaskListProps } from '../../@types/task';
 import { KanbanContext } from '../../contexts/kanban/provider';
-import { Container, StyledTaskList, Title } from './styles';
+import { ColumnContainer, StyledTaskList, Title } from './styles';
 import CreateTaskPopper from '../Popper/CreateNewTaskPopper';
 
 const TaskList: React.FC<TaskListProps> = (props) => {
@@ -40,7 +40,7 @@ export const Column: React.FC<ColumnProps> = (props) => {
   };
 
   return (
-    <Container>
+    <ColumnContainer isColumnEmpty={props.tasks.length <= 0}>
       <Stack direction="row" spacing={1} alignItems="center">
         <Title>{props.column.title}</Title>
         {props.column.cadAddNewTask && <CreateTaskPopper />}
@@ -79,6 +79,6 @@ export const Column: React.FC<ColumnProps> = (props) => {
           </TaskList>
         )}
       </Droppable>
-    </Container>
+    </ColumnContainer>
   );
 };

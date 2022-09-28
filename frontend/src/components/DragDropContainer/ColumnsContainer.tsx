@@ -5,12 +5,18 @@ import { KanbanContext } from '../../contexts/kanban/provider';
 import { ITask, KanbanContextType } from '../../@types/task';
 import { columnOrder } from './config';
 import { Box } from '@mui/material';
+import theme from '../../theme';
+import grey from '@mui/material/colors/grey';
 
 const ColumnsContainer = () => {
   const { tasks, columns } = useContext(KanbanContext) as KanbanContextType;
 
   return (
-    <Box display="flex">
+    <Box
+      display="flex"
+      // sx={{ background: (theme) => theme.palette.common.grey }}
+      // sx={{ background: grey[100] }}
+    >
       {columnOrder.map((columnId: string) => {
         if (columns === undefined) return [];
 
